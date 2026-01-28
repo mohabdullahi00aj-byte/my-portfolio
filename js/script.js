@@ -63,40 +63,209 @@ resumeBtns.forEach((btn, idx) => {
     });
 });
 
-/* ================= PORTFOLIO SLIDER ================= */
+/* ================= PORTFOLIO PROJECT NAVIGATION ================= */
 
-const arrowRight = document.querySelector('.portfolio-box .navigation .arrow-right');
-const arrowLeft = document.querySelector('.portfolio-box .navigation .arrow-left');
-const portfolioDetails = document.querySelectorAll('.portfolio-detail');
-const imgSlide = document.querySelector('.portfolio-carousel .img-slide');
+// Project data array
+const projects = [
+    {
+        number: "01",
+        title: "Water Management System",
+        description: "A web-based Water Management System designed to monitor and manage water quality data and user can report anything related to water quality even if there is leakage.",
+        tech: "PHP, MySQL, HTML, CSS",
+        image: "images/portfolio1.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "02",
+        title: "Digital Marketing Campaign Optimization",
+        description: "The Digital Marketing Campaign Optimization project leverages the Knowledge Discovery in Databases (KDD) methodology to analyze marketing data and enhance campaign performance. It integrates multiple data mining techniques, including market basket analysis, clustering, recommender systems, and anomaly detection, to support data-driven decision-making and improve marketing efficiency.",
+        tech: "Python",
+        image: "images/portfolio2.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "03",
+        title: "Handwritten Writer Recognition",
+        description: "A deep learning based handwritten writer recognition system using CNNs, OpenCV, and TensorFlow for identifying writers from handwritten text images.",
+        tech: "Python",
+        image: "images/portfolio3.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "04",
+        title: "Global Schema Integration Project",
+        description: "We analyzed three independent databases with overlapping business domains. We identified naming, structural, and key conflicts during integration. Finally, we designed a unified global relational schema to support distributed data access and consistency.",
+        tech: "MySQL",
+        image: "images/portfolio4.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "05",
+        title: "Bidding System",
+        description: "The Online Bidding System is a web application that enables users to conduct and participate in online auctions. It supports user authentication, item listing, real-time bidding, and bid management, providing a secure and efficient auction platform.",
+        tech: "PHP, MySQL, CSS, HTML",
+        image: "images/portfolio5.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "06",
+        title: "Diabetes & Heart Disease Prediction",
+        description: "This project combines unsupervised learning for patient segmentation and supervised learning for disease prediction, forming a complete end-to-end machine learning solution for healthcare analytics.",
+        tech: "Python",
+        image: "images/portfolio6.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "07",
+        title: "Somali Car Hub Frontend",
+        description: "Somali Car Hub Frontend is a modern web interface designed for showcasing and browsing cars available for sale in Somalia. The platform allows users to explore vehicle listings, view detailed information such as price, model, condition, and images, and easily search or filter cars based on their preferences.",
+        tech: "JavaScript, CSS, HTML",
+        image: "images/portfolio7.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "08",
+        title: "Somali Edu Hub Frontend",
+        description: "Somali Edu Hub Frontend is a web interface for accessing Somali education notes and past exam papers in a simple and organized way.",
+        tech: "JavaScript, CSS, HTML",
+        image: "images/portfolio8.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "09",
+        title: "Amazon Product Review Sentiment Analysis (NLP)",
+        description: "An NLP-based machine learning project that analyzes Amazon product reviews and classifies them as positive or negative. The system applies text preprocessing, TF-IDF feature extraction, and supervised learning models to evaluate sentiment and support data-driven business decisions.",
+        tech: "Python, NLP, Machine Learning, TF-IDF, Scikit-learn",
+        image: "images/portfolio9.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "10",
+        title: "SalesSense AI System",
+        description: "SalesSense AI is a comprehensive web-based artificial intelligence system designed for sales forecasting and business analytics. The system enables businesses to upload their sales data, generate accurate ML-powered predictions, and manage their forecasting history with complete data control.",
+        tech: "React.js, CSS, FastAPI with Python 3.14",
+        image: "images/portfolio10.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    },
+    {
+        number: "11",
+        title: "Zero Trust Network Architecture",
+        description: "This project implements a Zero Trust Network Architecture that enforces strict authentication, authorization, and network segmentation to enhance enterprise network security.",
+        tech: "JavaScript, Node.js, MySQL, Tailwind, GNS3, pfSense, Ubuntu, VirtualBox, Kali Linux",
+        image: "images/portfolio11.jpg",
+        github: "https://github.com/mohabdullahi00aj-byte"
+    }
+];
 
-let index = 0;
-const totalProjects = portfolioDetails.length;
+// Portfolio navigation variables
+let currentProjectIndex = 0;
+const totalProjects = projects.length;
 
-const activePortfolio = () => {
-    imgSlide.style.transform = `translateX(calc(${index * -100}% - ${index * 2}rem))`;
+// DOM elements
+const projectNumber = document.getElementById('project-number');
+const projectTitle = document.getElementById('project-title');
+const projectDescription = document.getElementById('project-description');
+const projectTech = document.getElementById('project-tech');
+const projectImg = document.getElementById('project-img');
+const currentProjectSpan = document.getElementById('current-project');
+const totalProjectsSpan = document.getElementById('total-projects');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const projectDisplay = document.querySelector('.project-display');
 
-    portfolioDetails.forEach(detail => detail.classList.remove('active'));
-    portfolioDetails[index].classList.add('active');
-
-    // button states
-    arrowLeft.classList.toggle('disabled', index === 0);
-    arrowRight.classList.toggle('disabled', index === totalProjects - 1);
+// Update project display
+const updateProject = () => {
+    const project = projects[currentProjectIndex];
+    
+    // Add fade out effect
+    projectDisplay.classList.add('fade-out');
+    
+    setTimeout(() => {
+        // Update content
+        projectNumber.textContent = project.number;
+        projectTitle.textContent = project.title;
+        projectDescription.textContent = project.description;
+        projectTech.textContent = project.tech;
+        projectImg.src = project.image;
+        projectImg.alt = project.title;
+        
+        // Update counter
+        currentProjectSpan.textContent = currentProjectIndex + 1;
+        
+        // Update navigation buttons
+        prevBtn.classList.toggle('disabled', currentProjectIndex === 0);
+        nextBtn.classList.toggle('disabled', currentProjectIndex === totalProjects - 1);
+        
+        // Remove fade out effect
+        projectDisplay.classList.remove('fade-out');
+    }, 150);
 };
 
-arrowRight.addEventListener('click', () => {
-    if (index < totalProjects - 1) {
-        index++;
-        activePortfolio();
+// Navigation event listeners
+prevBtn.addEventListener('click', () => {
+    if (currentProjectIndex > 0) {
+        currentProjectIndex--;
+        updateProject();
     }
 });
 
-arrowLeft.addEventListener('click', () => {
-    if (index > 0) {
-        index--;
-        activePortfolio();
+nextBtn.addEventListener('click', () => {
+    if (currentProjectIndex < totalProjects - 1) {
+        currentProjectIndex++;
+        updateProject();
     }
 });
 
-/* INIT */
-activePortfolio();
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    // Only work when portfolio section is active
+    const portfolioSection = document.getElementById('portfolio');
+    if (!portfolioSection.classList.contains('active')) return;
+    
+    if (e.key === 'ArrowLeft' && currentProjectIndex > 0) {
+        currentProjectIndex--;
+        updateProject();
+    } else if (e.key === 'ArrowRight' && currentProjectIndex < totalProjects - 1) {
+        currentProjectIndex++;
+        updateProject();
+    }
+});
+
+// Touch/Swipe support for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+const handleSwipe = () => {
+    const portfolioSection = document.getElementById('portfolio');
+    if (!portfolioSection.classList.contains('active')) return;
+    
+    const swipeThreshold = 50;
+    const swipeDistance = touchEndX - touchStartX;
+    
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0 && currentProjectIndex > 0) {
+            // Swipe right - go to previous project
+            currentProjectIndex--;
+            updateProject();
+        } else if (swipeDistance < 0 && currentProjectIndex < totalProjects - 1) {
+            // Swipe left - go to next project
+            currentProjectIndex++;
+            updateProject();
+        }
+    }
+};
+
+projectDisplay.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+projectDisplay.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+});
+
+// Initialize portfolio
+document.addEventListener('DOMContentLoaded', () => {
+    totalProjectsSpan.textContent = totalProjects;
+    updateProject();
+});
